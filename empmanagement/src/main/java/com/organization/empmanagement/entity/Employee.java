@@ -3,9 +3,12 @@ package com.organization.empmanagement.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,13 +24,19 @@ public class Employee {
 	private Double salary;
 	private LocalDate doj;
 	private String location;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "department_id")
+	private Department department;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id")
+	private Role role;
 
 	public Employee() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Employee(Integer empId, String name, String phoneNo, String address, LocalDate dob, Double salary,
-			LocalDate doj, String location) {
+			LocalDate doj, String location, Department department, Role role) {
 		super();
 		this.empId = empId;
 		this.name = name;
@@ -37,6 +46,8 @@ public class Employee {
 		this.salary = salary;
 		this.doj = doj;
 		this.location = location;
+		this.department = department;
+		this.role = role;
 	}
 
 	public Integer getEmpId() {
@@ -103,9 +114,20 @@ public class Employee {
 		this.location = location;
 	}
 
-	@Override
-	public String toString() {
-		return "Employee [empId=" + empId + ", name=" + name + ", phoneNo=" + phoneNo + ", address=" + address
-				+ ", dob=" + dob + ", salary=" + salary + ", doj=" + doj + ", location=" + location + "]";
+	public Department getDepartment() {
+		return department;
 	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 }

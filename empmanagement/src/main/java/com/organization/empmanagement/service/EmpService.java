@@ -6,14 +6,25 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.organization.empmanagement.entity.Department;
 import com.organization.empmanagement.entity.Employee;
+import com.organization.empmanagement.entity.Role;
+import com.organization.empmanagement.repository.DepRepository;
 import com.organization.empmanagement.repository.EmpRepository;
+import com.organization.empmanagement.repository.NotFoundException;
+import com.organization.empmanagement.repository.RoleRepository;
 
 @Service
 public class EmpService {
 
 	@Autowired
 	private EmpRepository employeeRepository;
+	
+	@Autowired
+	private DepRepository depRepo;
+	
+	@Autowired
+	private RoleRepository roleRepo;
 
 	public List<Employee> getAllEmployees() {
 		return employeeRepository.findAll();
@@ -24,7 +35,11 @@ public class EmpService {
 		return employee.orElse(null);
 	}
 
-	public Employee createEmployee(Employee employee) {
+	public Employee createEmployee(Employee employee){
+		Optional<Department> department= depRepo.findById(employee.getDepartment().getId());
+		Optional<Role> role= roleRepo.findById(employee.getRole().getId());
+		employee.setDepartment(department.get());
+		employee.setRole(role.get());
 		return employeeRepository.save(employee);
 	}
 
@@ -39,9 +54,17 @@ public class EmpService {
 			existingEmployee.setSalary(employeeDetails.getSalary());
 			existingEmployee.setDoj(employeeDetails.getDoj());
 			existingEmployee.setLocation(employeeDetails.getLocation());
+			if(employeeDetails.getDepartment() != null) {
+				Optional<Department> department= depRepo.findById(employeeDetails.getDepartment().getId());
+				existingEmployee.setDepartment(employeeDetails.getDepartment());
+			}
+			if(employeeDetails.getRole() != null) {
+				Optional<Role> role= roleRepo.findById(employeeDetails.getRole().getId());
+				existingEmployee.setRole(employeeDetails.getRole());
+			}
 			return employeeRepository.save(existingEmployee);
 		}
-		return null;
+		throw new NotFoundException("Employee Not Found to Update !!!");
 	}
 
 	public void deleteEmployee(Integer empId) {

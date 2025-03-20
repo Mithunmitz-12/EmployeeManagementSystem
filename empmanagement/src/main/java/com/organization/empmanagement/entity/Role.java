@@ -10,31 +10,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "department")
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="role")
 @Data
-public class Department {
+public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	private String name;
 
-	public Department() {
+	public Role() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Department(int id, String name) {
+	public Role(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -46,3 +46,4 @@ public class Department {
 		this.name = name;
 	}
 }
+	

@@ -3,6 +3,8 @@ package com.organization.empmanagement.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,27 +25,28 @@ public class EmpController {
 	private EmpService employeeService;
 
 	@GetMapping
-	public List<Employee> getAllEmployees() {
-		return employeeService.getAllEmployees();
+	public ResponseEntity<List<Employee>> getAllEmployees() {
+		return new ResponseEntity<List<Employee>>(employeeService.getAllEmployees(), HttpStatus.OK);
 	}
 
 	@GetMapping("/{empId}")
-	public Employee getEmployeeById(@PathVariable Integer empId) {
-		return employeeService.getEmployeeById(empId);
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer empId) {
+		return new ResponseEntity<Employee>(employeeService.getEmployeeById(empId), HttpStatus.OK);
 	}
 
 	@PostMapping
-	public Employee createEmployee(@RequestBody Employee employee) {
-		return employeeService.createEmployee(employee);
+	public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+		return new ResponseEntity<Employee>(employeeService.createEmployee(employee), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{empId}")
-	public Employee updateEmployee(@PathVariable Integer empId, @RequestBody Employee employee) {
-		return employeeService.updateEmployee(empId, employee);
+	public ResponseEntity<Employee> updateEmployee(@PathVariable Integer empId, @RequestBody Employee employee)  {
+		return new ResponseEntity<Employee>(employeeService.updateEmployee(empId, employee), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{empId}")
-	public void deleteEmployee(@PathVariable Integer empId) {
+	public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable Integer empId) {
 		employeeService.deleteEmployee(empId);
+		return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
 	}
 }
